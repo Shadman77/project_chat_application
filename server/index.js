@@ -1,6 +1,5 @@
 const http = require('http');
 const express = require('express');
-const socketio = require('socket.io');
 const cors = require('cors');
 
 const { addUser, removeUser, getUser, getUsersInRoom } = require('./users');
@@ -9,13 +8,15 @@ const router = require('./router');
 
 const app = express();
 const server = http.createServer(app);
-// const io = socketio(server);
 
-const io = socketio(server, {
+const io = require('socket.io')(server, {
   cors: {
-    origin: "*",
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"],
+    credentials: true
   },
-});
+  allowEIO3: true
+})
 
 app.use(cors());
 app.use(router);
